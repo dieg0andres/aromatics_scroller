@@ -1,14 +1,13 @@
-import json
 import network
 import uasyncio as asyncio
-import urequests
-import sys
 
-#from scroller import Scroller
+from scroller import Scroller
 from time import sleep
+from umqtt.simple import MQTTClient
 
-SSID = 'Hotel KINGS COURT' #'mauriegio'
-PSSWRD = 'kc123456' #'carmen19'
+
+SSID = 'Crowne Plaza' #'mauriegio'
+PSSWRD = 'carmen19'
 FUTURES_URL = 'https://finviz.com/futures.ashx'
 
 BRENT = 'QA'
@@ -36,7 +35,7 @@ def connect_to_network(wlan):
             break
         max_wait -= 1
         print('Waiting for connection...')
-        time.sleep(1)
+        sleep(1)
     
     if wlan.status() != 3:
         raise RuntimeError('Network connection failed :(')
@@ -128,29 +127,74 @@ async def fetch_data():
 
 async def main():
     
-#    scroll = Scroller()
-#    scroll.clear()
+    scroll = Scroller()
+    scroll.clear()
 
     wlan = network.WLAN(network.STA_IF)
     connect_to_network(wlan)
-        
-    get_data(FUTURES_URL)        
     
-    data = _read_from_file('data.bin')
-    message = build_msg(data)
-    sleep(5)
-    get_data(FUTURES_URL)
+    mqtt_server = 'broker.hivemq.com'
+    client_id = 'clientId-QSrJd1EDc5'
+    username = 'dieg0andres19'
+    password = '$Carmen19'
+    topic_sub = b'testing123diego'
+    
+    def sub_cb(topic, message):
+        print('topic: ' + str(topic))
+        print('/n/nmessage: ' + str(message))
+    
+    def mqtt_connect():
+        print('in here')
+        client = MQTTClient(client_id, mqtt_server, port=8884, user=username, password=password, keepalive=60)
+        client.set_callback(sub_cb)
+        client.connect()
+        print('Connected to %s MQTT Broker'%(mqtt_server))
+        return client
+        
+    def reconnect():
+        print('Failed to connect to MQTT Broker. Reconnecting...')
+        sleep(5)
+        machine.reset()
+    
+    try:
+        client = mqtt_connect()
+        
+        
+    except OSError as e:
+        reconnect()
+        
+    while True:
+        client.subscribe(topic_sub)
+        print('subscribed to ' + str(topic_sub))
+        sleep(30)    
+        
+    
+#    get_data(FUTURES_URL)        
+    
+#    data = _read_from_file('data.bin')
+#    message = build_msg(data)
+#    sleep(5)
+#    get_data(FUTURES_URL)
     
    # print(message)
-         
-   # asyncio.create_task(text_to_scroller(message, scroll))
+    msg = [('BZ 290', 0), ('PX 1100', 1.2)]
+   # asyncio.create_task( scroll.continously_display_prices(msg) )
    # asyncio.create_task(fetch_data())
             
-   # while True:
-   #     print('i')
-   #     await asyncio.sleep(60)
+    #while True:
+    #    print('i')
+    #    await asyncio.sleep(60)
        
 
 
 
 asyncio.run(main())
+
+
+
+
+
+
+
+
+

@@ -1,14 +1,15 @@
-# scroller demo
+import math
+import picounicorn
+import uasyncio as asyncio
 
 from fonts import *
-import picounicorn
 from time import sleep
-import math
+
 
 picounicorn.init()
 
 class Scroller():
- 
+
     offset = 0
     gap = 1
     hue = 1.0
@@ -107,58 +108,6 @@ class Scroller():
             hue = 1.0
         self.hue = hue    
         for character in message:
-            if character == 'a':
-                self.display_character(a, position)
-            if character == 'b':
-                self.display_character(b, position)
-            if character == 'c':
-                self.display_character(c, position)
-            if character == 'd':
-                self.display_character(d, position)
-            if character == 'e':
-                self.display_character(e, position)
-            if character == 'f':
-                self.display_character(f, position)
-            if character == 'g':
-                self.display_character(g, position)
-            if character == 'h':
-                self.display_character(h, position)
-            if character == 'i':
-                self.display_character(i, position)
-            if character == 'j':
-                self.display_character(j, position)
-            if character == 'k':
-                self.display_character(k, position)
-            if character == 'l':
-                self.display_character(l, position)
-            if character == 'm':
-                self.display_character(m, position)
-            if character == 'n':
-                self.display_character(n, position)
-            if character == 'o':
-                self.display_character(o, position)
-            if character == 'p':
-                self.display_character(p, position)
-            if character == 'q':
-                self.display_character(q, position)
-            if character == 'r':
-                self.display_character(r, position)
-            if character == 's':
-                self.display_character(s, position)
-            if character == 't':
-                self.display_character(t, position)
-            if character == 'u':
-                self.display_character(u, position)
-            if character == 'v':
-                self.display_character(v, position)
-            if character == 'w':
-                self.display_character(w, position)
-            if character == 'x':
-                self.display_character(x, position)
-            if character == 'y':
-                self.display_character(y, position)
-            if character == 'z':
-                self.display_character(z, position)
             if character == ' ':
                 self.display_character(space, position)
             if character == '1':
@@ -183,54 +132,6 @@ class Scroller():
                 self.display_character(zero, position)
             if character == '.':
                 self.display_character(fullstop, position)
-            if character == '@':
-                self.display_character(at, position)
-            if character == '!':
-                self.display_character(exclaimation, position)
-            if character == '#':
-                self.display_character(pound, position)
-            if character == '"':
-                self.display_character(speech, position)
-            if character == '$':
-                self.display_character(dollar, position)
-            if character == '%':
-                self.display_character(percentage, position)
-            if character == '&':
-                self.display_character(amplesand, position)
-            if character == '(':
-                self.display_character(left_bracket, position)
-            if character == ')':
-                self.display_character(right_bracket, position)
-            if character == '?':
-                self.display_character(question, position)
-            if character == '^':
-                self.display_character(carat, position)
-            if character == '_':
-                self.display_character(underscore, position)
-            if character == '<':
-                self.display_character(left_arrow, position)
-            if character == '>':
-                self.display_character(right_arrow, position)
-            if character == '/':
-                self.display_character(forward_slash, position)
-            if character == '\\':
-                self.display_character(back_slash, position)
-            if character == '=':
-                self.display_character(plus, position)
-            if character == '-':
-                self.display_character(minus, position)
-            if character == ':':
-                self.display_character(colon, position)
-            if character == ';':
-                self.display_character(semicolon, position)
-            if character == '=':
-                self.display_character(equals, position)
-            if character == '~':
-                self.display_character(tilde, position)
-            if character == "'":
-                self.display_character(single_quote, position)
-            if character == '|':
-                self.display_character(pipe, position)
             if character == 'A':
                 self.display_character(A, position)
             if character == 'B':
@@ -283,8 +184,24 @@ class Scroller():
                 self.display_character(Y, position)
             if character == 'Z':
                 self.display_character(Z, position)
-            if character == '}':
-                self.display_character(smiley, position)
+
                 
         self.offset = 0
+        
+
+    async def continously_display_prices(self, messages):
+    # messages is an array of tuples, in which [0] is the message and [1] the hue, for example
+    #messages = [("BZ 290", 0), ("RBOB 210", 1.2)]
+    
+        while True:
+            
+            for msg in messages:
+                hue = msg[1]
+                message = msg[0]
+
+                for position in range(16,-len(message*(5+1)),-1):
+                    self.show_message(message, position, hue)
+                    sleep(0.002)
+            
+            await asyncio.sleep(0.5)
     
