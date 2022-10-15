@@ -84,7 +84,7 @@ class Message_Manager:
         # a single publish, this can also be done in loops, etc.
         for m in wrapped_msgs:
 
-            client.publish("prices", payload=str.encode(m), qos=1)
+            client.publish("prices", payload=str.encode(m), qos=0)
             print("published ", m)
             time.sleep(1)
 

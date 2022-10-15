@@ -51,6 +51,9 @@ class Price_Manager:
                 self.__update_BZ_prices(prices, emails)
                 break
 
+    def print_price(self, p):
+        print("Price:", p.desc, p.last, p.month, p.loc, p.last_updated)
+
 
     def __get_FUSION_emails(self):
         #returns a list of emails of type Email_
@@ -168,11 +171,6 @@ class Price_Manager:
                             price.last_updated = email_.date
 
 
-    def __update_EU_BZ_prices(self, prices, emails):
-        pass
-        #TODO
-
-
     def __calculate_price_helper(self, potential_price):
         p=-1
         try:
@@ -184,3 +182,8 @@ class Price_Manager:
             p = -1
 
         return p
+
+
+    def __update_EU_BZ_prices(self, prices, emails):
+        pass
+        #TODO

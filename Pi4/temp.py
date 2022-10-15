@@ -8,7 +8,7 @@ pm = Price_Manager()
 pm.update_prices(prices)
 
 for p in prices:
-    print(p.desc, p.last, p.month, p.loc, p.last_updated)
+    pm.print_price(p)
 
 mm = Message_Manager()
 msgs = mm.create_messages(prices)
